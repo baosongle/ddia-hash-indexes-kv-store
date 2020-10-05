@@ -11,12 +11,12 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class KVServiceImpl implements KVService {
-    private final KVConfig config;
+public class KVStoreServiceImpl implements KVStoreService {
+    private final KVStoreConfig config;
     private final Map<String, Long> map;
 
     @Autowired
-    public KVServiceImpl(KVConfig config) {
+    public KVStoreServiceImpl(KVStoreConfig config) {
         this.config = config;
         this.map = new HashMap<>();
         this.loadFile();
@@ -89,8 +89,12 @@ public class KVServiceImpl implements KVService {
 
     private File createFileIfNotExists() {
         File file = new File(config.getDataFile());
-        if (!file.exists() && file.getParentFile().mkdirs()) {
-            throw new KVStoreException("create file " + config.getDataFile() +" failed with error");
+        try {
+            if (!file.exists() && !file.getParentFile().mkdirs() && !file.createNewFile()) {
+                throw new KVStoreException("create file " + config.getDataFile() +" failed with error");
+            }
+        } catch (IOException e) {
+            throw new KVStoreException("create file " + config.getDataFile() +" failed with error", e);
         }
         return file;
     }
