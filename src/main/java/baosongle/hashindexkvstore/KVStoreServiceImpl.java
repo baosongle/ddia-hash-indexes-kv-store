@@ -141,7 +141,7 @@ public class KVStoreServiceImpl implements KVStoreService {
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         try {
             File file = createFileIfNotExists();
             try (PrintWriter writer = new PrintWriter(file)) {
