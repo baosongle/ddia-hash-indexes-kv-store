@@ -139,4 +139,17 @@ public class KVStoreServiceImpl implements KVStoreService {
             }
         }
     }
+
+    @Override
+    public void clear() {
+        try {
+            File file = createFileIfNotExists();
+            try (PrintWriter writer = new PrintWriter(file)) {
+                writer.print("");
+                map.clear();
+            }
+        } catch (IOException | KVStoreException e) {
+            log.error("clear file {} failed with error", config.getDataFile(), e);
+        }
+    }
 }

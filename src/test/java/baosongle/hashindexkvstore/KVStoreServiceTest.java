@@ -81,4 +81,14 @@ public class KVStoreServiceTest {
         name = kvStoreService.get("name");
         Assertions.assertEquals("mike", name);
     }
+
+    @Test
+    @Order(6)
+    public void testClear() {
+        setup(false);
+
+        kvStoreService.clear();
+        Assertions.assertNull(kvStoreService.get("name"));
+        Assertions.assertNull(kvStoreService.get("base"));
+    }
 }
